@@ -50,7 +50,8 @@ builder.Services.AddCors(options =>
                   "https://localhost:7079", "http://localhost:5086",
                   "http://localhost:5079", "http://localhost:5000")
               .AllowAnyMethod()
-              .AllowAnyHeader();
+              .AllowAnyHeader()
+              .WithExposedHeaders("X-Cache", "X-Cache-Items", "X-Cache-Invalidated", "X-Response-Time-Ms");
     });
 });
 

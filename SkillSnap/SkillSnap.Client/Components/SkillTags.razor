@@ -23,10 +23,35 @@
         <ul>
             @foreach (var skill in skills)
             {
-                <li class="skill-tag">
-                    <span class="skill-name">@skill.Name</span>
-                    <span class="skill-level">@skill.Level</span>
-                </li>
+                @if (editingId == skill.Id)
+                {
+                    <li class="skill-tag skill-tag--editing">
+                        <input @bind="editDraft!.Name" placeholder="Skill name" />
+                        <input @bind="editDraft!.Level" placeholder="Level" />
+                        <div class="action-row">
+                            <button class="btn btn-primary btn-sm" @onclick="() => SaveEdit(skill.Id)">Save</button>
+                            <button class="btn btn-secondary btn-sm" @onclick="CancelEdit">Cancel</button>
+                        </div>
+                        @if (!string.IsNullOrEmpty(errorMessage))
+                        {
+                            <p class="error-text">@errorMessage</p>
+                        }
+                    </li>
+                }
+                else
+                {
+                    <li class="skill-tag">
+                        <span class="skill-name">@skill.Name</span>
+                        <span class="skill-level">@skill.Level</span>
+                        @if (Session.IsAdmin)
+                        {
+                            <div class="action-row">
+                                <button class="btn btn-secondary btn-sm" @onclick="() => StartEdit(skill)">Edit</button>
+                                <button class="btn btn-danger btn-sm" @onclick="() => DeleteSkill(skill.Id)">Delete</button>
+                            </div>
+                        }
+                    </li>
+                }
             }
         </ul>
     }
@@ -43,6 +68,9 @@
 
 @code {
     private List<Skill>? skills;
+    private int? editingId;
+    private Skill? editDraft;
+    private string? errorMessage;
 
     protected override async Task OnInitializedAsync()
     {
@@ -53,5 +81,52 @@
     private async Task RefreshSkills()
     {
         skills = await SkillService.GetSkillsAsync();
+    }
+
+    private void StartEdit(Skill skill)
+    {
+        editingId = skill.Id;
+        editDraft = new Skill
+        {
+            Id = skill.Id,
+            Name = skill.Name,
+            Level = skill.Level,
+            PortfolioUserId = skill.PortfolioUserId
+        };
+        errorMessage = null;
+    }
+
+    private void CancelEdit()
+    {
+        editingId = null;
+        editDraft = null;
+        errorMessage = null;
+    }
+
+    private async Task SaveEdit(int id)
+    {
+        errorMessage = null;
+        if (string.IsNullOrWhiteSpace(editDraft?.Name) || string.IsNullOrWhiteSpace(editDraft?.Level))
+        {
+            errorMessage = "Name and level are required.";
+            return;
+        }
+
+        var ok = await SkillService.UpdateSkillAsync(id, editDraft!);
+        if (!ok)
+        {
+            errorMessage = "Could not update skill. Check your session.";
+            return;
+        }
+
+        CancelEdit();
+        skills = await SkillService.GetSkillsAsync();
+    }
+
+    private async Task DeleteSkill(int id)
+    {
+        var ok = await SkillService.DeleteSkillAsync(id);
+        if (ok)
+            skills = await SkillService.GetSkillsAsync();
     }
 }

@@ -1,0 +1,53 @@
+@using SkillSnap.Client.Models
+@using SkillSnap.Client.Services
+@inject ProjectService ProjectService
+
+<div class="form-card">
+    <h4>Add Project</h4>
+    <div class="form-group">
+        <label for="project-title">Title</label>
+        <input id="project-title" placeholder="Project title" @bind="newProject.Title" />
+    </div>
+    <div class="form-group">
+        <label for="project-description">Description</label>
+        <input id="project-description" placeholder="Short description" @bind="newProject.Description" />
+    </div>
+    <div class="form-group">
+        <label for="project-image">Image URL</label>
+        <input id="project-image" placeholder="https://..." @bind="newProject.ImageUrl" />
+    </div>
+    <button class="btn btn-primary" type="button" @onclick="HandleAdd">Add Project</button>
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <p class="error-text">@errorMessage</p>
+    }
+</div>
+
+@code {
+    [Parameter] public EventCallback OnProjectAdded { get; set; }
+
+    private Project newProject = new();
+    private string? errorMessage;
+
+    private async Task HandleAdd()
+    {
+        errorMessage = null;
+
+        if (string.IsNullOrWhiteSpace(newProject.Title) || string.IsNullOrWhiteSpace(newProject.Description))
+        {
+            errorMessage = "Title and description are required.";
+            return;
+        }
+
+        var added = await ProjectService.AddProjectAsync(newProject);
+        if (!added)
+        {
+            errorMessage = "Could not add project. Log in again if your session is expired.";
+            return;
+        }
+
+        newProject = new();
+        await OnProjectAdded.InvokeAsync();
+    }
+}

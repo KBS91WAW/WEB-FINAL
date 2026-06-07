@@ -298,6 +298,54 @@ label {
     margin-top: 1.25rem;
 }
 
+/* Edit/Delete action row inside cards */
+.action-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.btn-sm {
+    padding: 0.3rem 0.75rem;
+    font-size: 0.8rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: opacity 0.15s;
+}
+
+.btn-sm:hover { opacity: 0.85; }
+
+.btn-danger {
+    background: #d13232;
+    color: #fff;
+}
+
+.btn-secondary {
+    background: var(--surface-alt);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+/* Skill tag edit mode */
+.skill-tag--editing {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+    padding: 0.75rem 1rem;
+    background: var(--surface-soft);
+}
+
+.skill-tag--editing input {
+    width: 100%;
+    padding: 0.35rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
 .form-group {
     margin-bottom: 1rem;
 }

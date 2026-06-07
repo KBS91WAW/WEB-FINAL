@@ -49,5 +49,44 @@ namespace SkillSnap.Client.Services
                 return false;
             }
         }
+
+        /// <summary>Updates an existing skill. Requires Admin role.</summary>
+        public async Task<bool> UpdateSkillAsync(int id, Skill skill)
+        {
+            try
+            {
+                var token = await _auth.GetTokenAsync();
+                using var request = new HttpRequestMessage(HttpMethod.Put, $"api/skills/{id}");
+                request.Content = JsonContent.Create(skill);
+                if (!string.IsNullOrEmpty(token))
+                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                var response = await _http.SendAsync(request);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating skill: {ex.Message}");
+                return false;
+            }
+        }
+
+        /// <summary>Deletes a skill by id. Requires Admin role.</summary>
+        public async Task<bool> DeleteSkillAsync(int id)
+        {
+            try
+            {
+                var token = await _auth.GetTokenAsync();
+                using var request = new HttpRequestMessage(HttpMethod.Delete, $"api/skills/{id}");
+                if (!string.IsNullOrEmpty(token))
+                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                var response = await _http.SendAsync(request);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting skill: {ex.Message}");
+                return false;
+            }
+        }
     }
 }

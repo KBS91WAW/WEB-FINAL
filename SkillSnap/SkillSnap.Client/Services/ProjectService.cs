@@ -49,5 +49,44 @@ namespace SkillSnap.Client.Services
                 return false;
             }
         }
+
+        /// <summary>Updates an existing project. Requires Admin role.</summary>
+        public async Task<bool> UpdateProjectAsync(int id, Project project)
+        {
+            try
+            {
+                var token = await _auth.GetTokenAsync();
+                using var request = new HttpRequestMessage(HttpMethod.Put, $"api/projects/{id}");
+                request.Content = JsonContent.Create(project);
+                if (!string.IsNullOrEmpty(token))
+                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                var response = await _http.SendAsync(request);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating project: {ex.Message}");
+                return false;
+            }
+        }
+
+        /// <summary>Deletes a project by id. Requires Admin role.</summary>
+        public async Task<bool> DeleteProjectAsync(int id)
+        {
+            try
+            {
+                var token = await _auth.GetTokenAsync();
+                using var request = new HttpRequestMessage(HttpMethod.Delete, $"api/projects/{id}");
+                if (!string.IsNullOrEmpty(token))
+                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                var response = await _http.SendAsync(request);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting project: {ex.Message}");
+                return false;
+            }
+        }
     }
 }

@@ -23,46 +23,60 @@
         @foreach (var project in projects)
         {
             <div class="project-card">
-                <img src="@project.ImageUrl" alt="@project.Title" />
-                <h4>@project.Title</h4>
-                <p>@project.Description</p>
+                @if (editingId == project.Id)
+                {
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input @bind="editDraft!.Title" placeholder="Title" />
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input @bind="editDraft!.Description" placeholder="Description" />
+                    </div>
+                    <div class="form-group">
+                        <label>Image URL</label>
+                        <input @bind="editDraft!.ImageUrl" placeholder="https://..." />
+                    </div>
+                    <div class="action-row">
+                        <button class="btn btn-primary btn-sm" @onclick="() => SaveEdit(project.Id)">Save</button>
+                        <button class="btn btn-secondary btn-sm" @onclick="CancelEdit">Cancel</button>
+                    </div>
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <p class="error-text">@errorMessage</p>
+                    }
+                }
+                else
+                {
+                    <img src="@project.ImageUrl" alt="@project.Title" />
+                    <h4>@project.Title</h4>
+                    <p>@project.Description</p>
+                    @if (Session.IsAdmin)
+                    {
+                        <div class="action-row">
+                            <button class="btn btn-secondary btn-sm" @onclick="() => StartEdit(project)">Edit</button>
+                            <button class="btn btn-danger btn-sm" @onclick="() => DeleteProject(project.Id)">Delete</button>
+                        </div>
+                    }
+                }
             </div>
         }
     }
 
     @if (Session.IsAdmin)
     {
-        <div class="form-card">
-            <h4>Add Project</h4>
-            <div class="form-group">
-                <label for="project-title">Title</label>
-                <input id="project-title" placeholder="Project title" @bind="newProject.Title" />
-            </div>
-            <div class="form-group">
-                <label for="project-description">Description</label>
-                <input id="project-description" placeholder="Short description" @bind="newProject.Description" />
-            </div>
-            <div class="form-group">
-                <label for="project-image">Image URL</label>
-                <input id="project-image" placeholder="https://..." @bind="newProject.ImageUrl" />
-            </div>
-            <button class="btn btn-primary" type="button" @onclick="HandleAdd">Add Project</button>
-        </div>
+        <AddProject OnProjectAdded="RefreshProjects" />
     }
     else
     {
         <p class="text-muted">Log in as an admin to add projects.</p>
     }
-
-    @if (!string.IsNullOrEmpty(errorMessage))
-    {
-        <p class="error-text">@errorMessage</p>
-    }
 </div>
 
 @code {
     private List<Project>? projects;
-    private Project newProject = new();
+    private int? editingId;
+    private Project? editDraft;
     private string? errorMessage;
 
     protected override async Task OnInitializedAsync()
@@ -71,24 +85,56 @@
         projects = await ProjectService.GetProjectsAsync();
     }
 
-    private async Task HandleAdd()
+    private async Task RefreshProjects()
+    {
+        projects = await ProjectService.GetProjectsAsync();
+    }
+
+    private void StartEdit(Project project)
+    {
+        editingId = project.Id;
+        editDraft = new Project
+        {
+            Id = project.Id,
+            Title = project.Title,
+            Description = project.Description,
+            ImageUrl = project.ImageUrl,
+            PortfolioUserId = project.PortfolioUserId
+        };
+        errorMessage = null;
+    }
+
+    private void CancelEdit()
+    {
+        editingId = null;
+        editDraft = null;
+        errorMessage = null;
+    }
+
+    private async Task SaveEdit(int id)
     {
         errorMessage = null;
-
-        if (string.IsNullOrWhiteSpace(newProject.Title) || string.IsNullOrWhiteSpace(newProject.Description))
+        if (string.IsNullOrWhiteSpace(editDraft?.Title) || string.IsNullOrWhiteSpace(editDraft?.Description))
         {
             errorMessage = "Title and description are required.";
             return;
         }
 
-        var added = await ProjectService.AddProjectAsync(newProject);
-        if (!added)
+        var ok = await ProjectService.UpdateProjectAsync(id, editDraft!);
+        if (!ok)
         {
-            errorMessage = "Could not add project. Log in again if your session is expired.";
+            errorMessage = "Could not update project. Check your session.";
             return;
         }
 
-        newProject = new();
+        CancelEdit();
         projects = await ProjectService.GetProjectsAsync();
+    }
+
+    private async Task DeleteProject(int id)
+    {
+        var ok = await ProjectService.DeleteProjectAsync(id);
+        if (ok)
+            projects = await ProjectService.GetProjectsAsync();
     }
 }

@@ -33,6 +33,10 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[K:/CODE_TRAIN/FINAL/SkillSnap/SkillSnap.Client/Components/AddProject.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBZGRQcm9qZWN0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [K:/CODE_TRAIN/FINAL/SkillSnap/SkillSnap.Client/Components/AddSkill.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBZGRTa2lsbC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
