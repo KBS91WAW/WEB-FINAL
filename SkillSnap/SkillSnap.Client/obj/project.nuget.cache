@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "FPA5S6h9kt0=",
+  "dgSpecHash": "tG/pFHJRa68=",
   "success": true,
-  "projectFilePath": "k:\\CODE_TRAIN\\FINAL\\SkillSnap\\SkillSnap.Client\\SkillSnap.Client.csproj",
+  "projectFilePath": "K:\\CODE_TRAIN\\FINAL\\SkillSnap\\SkillSnap.Client\\SkillSnap.Client.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\krzys\\.nuget\\packages\\microsoft.aspnetcore.app.internal.assets\\10.0.8\\microsoft.aspnetcore.app.internal.assets.10.0.8.nupkg.sha512",
     "C:\\Users\\krzys\\.nuget\\packages\\microsoft.aspnetcore.authorization\\10.0.8\\microsoft.aspnetcore.authorization.10.0.8.nupkg.sha512",

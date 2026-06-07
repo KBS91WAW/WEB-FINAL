@@ -46,7 +46,7 @@ namespace SkillSnap.Client.Services
                 var result = await response.Content.ReadFromJsonAsync<TokenResponse>();
                 if (result?.Token is not null)
                 {
-                    await _js.InvokeVoidAsync("localStorage.setItem", "authToken", result.Token);
+                    await _js.InvokeVoidAsync("skillSnapStorage.setItem", "authToken", result.Token);
                     PopulateSession(result.Token);
                 }
 
@@ -61,14 +61,14 @@ namespace SkillSnap.Client.Services
         /// <summary>Removes the JWT from localStorage and clears the session.</summary>
         public async Task LogoutAsync()
         {
-            await _js.InvokeVoidAsync("localStorage.removeItem", "authToken");
+            await _js.InvokeVoidAsync("skillSnapStorage.removeItem", "authToken");
             _session.Clear();
         }
 
         /// <summary>Returns the stored JWT from localStorage, or null if not logged in.</summary>
         public async Task<string?> GetTokenAsync()
         {
-            return await _js.InvokeAsync<string?>("localStorage.getItem", "authToken");
+            return await _js.InvokeAsync<string?>("skillSnapStorage.getItem", "authToken");
         }
 
         /// <summary>Restores the session from localStorage on page load.</summary>
@@ -97,8 +97,9 @@ namespace SkillSnap.Client.Services
                 var userId = jwt.Subject
                     ?? jwt.Claims.FirstOrDefault(c => c.Type == "sub")?.Value
                     ?? string.Empty;
+                var email = jwt.Claims.FirstOrDefault(c => c.Type == "email" || c.Type == JwtRegisteredClaimNames.Email)?.Value ?? string.Empty;
                 var role = jwt.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role || c.Type == "role")?.Value ?? string.Empty;
-                _session.SetUser(userId, role);
+                _session.SetUser(userId, email, role);
             }
             catch (Exception ex)
             {

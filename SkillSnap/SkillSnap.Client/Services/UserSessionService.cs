@@ -3,14 +3,16 @@ namespace SkillSnap.Client.Services
     public class UserSessionService
     {
         public string? UserId { get; private set; }
+        public string? Email { get; private set; }
         public string? Role { get; private set; }
         public string? CurrentProjectTitle { get; private set; }
 
         public event Action? OnChange;
 
-        public void SetUser(string userId, string role)
+        public void SetUser(string userId, string email, string role)
         {
             UserId = userId;
+            Email = email;
             Role = role;
             NotifyStateChanged();
         }
@@ -24,6 +26,7 @@ namespace SkillSnap.Client.Services
         public void Clear()
         {
             UserId = null;
+            Email = null;
             Role = null;
             CurrentProjectTitle = null;
             NotifyStateChanged();

@@ -11,7 +11,11 @@
         <div class="top-row px-4">
             @if (Session.IsAuthenticated)
             {
-                <span class="text-muted small">Logged in as @Session.UserId</span>
+                <span class="user-badge">
+                    <span class="user-badge__dot"></span>
+                    @(Session.IsAdmin ? "Admin" : "")
+                    @(!string.IsNullOrEmpty(Session.Email) ? Session.Email : Session.UserId)
+                </span>
             }
         </div>
 

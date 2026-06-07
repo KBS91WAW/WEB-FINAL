@@ -1,0 +1,49 @@
+@using SkillSnap.Client.Models
+@using SkillSnap.Client.Services
+@inject SkillService SkillService
+
+<div class="form-card">
+    <h4>Add Skill</h4>
+    <div class="form-group">
+        <label for="skill-name">Name</label>
+        <input id="skill-name" placeholder="Skill name" @bind="newSkill.Name" />
+    </div>
+    <div class="form-group">
+        <label for="skill-level">Level</label>
+        <input id="skill-level" placeholder="e.g. Expert" @bind="newSkill.Level" />
+    </div>
+    <button class="btn btn-primary" type="button" @onclick="HandleAdd">Add Skill</button>
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <p class="error-text">@errorMessage</p>
+    }
+</div>
+
+@code {
+    [Parameter] public EventCallback OnSkillAdded { get; set; }
+
+    private Skill newSkill = new();
+    private string? errorMessage;
+
+    private async Task HandleAdd()
+    {
+        errorMessage = null;
+
+        if (string.IsNullOrWhiteSpace(newSkill.Name) || string.IsNullOrWhiteSpace(newSkill.Level))
+        {
+            errorMessage = "Name and level are required.";
+            return;
+        }
+
+        var added = await SkillService.AddSkillAsync(newSkill);
+        if (!added)
+        {
+            errorMessage = "Could not add skill. Log in again if your session is expired.";
+            return;
+        }
+
+        newSkill = new();
+        await OnSkillAdded.InvokeAsync();
+    }
+}
