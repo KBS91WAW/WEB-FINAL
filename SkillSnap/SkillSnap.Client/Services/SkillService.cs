@@ -19,19 +19,35 @@ namespace SkillSnap.Client.Services
         /// <summary>Fetches all skills from the API.</summary>
         public async Task<List<Skill>> GetSkillsAsync()
         {
-            return await _http.GetFromJsonAsync<List<Skill>>("api/skills") ?? new List<Skill>();
+            try
+            {
+                return await _http.GetFromJsonAsync<List<Skill>>("api/skills") ?? new List<Skill>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching skills: {ex.Message}");
+                return new List<Skill>();
+            }
         }
 
         /// <summary>Adds a new skill. Requires Admin role; attaches Bearer token.</summary>
         public async Task<bool> AddSkillAsync(Skill newSkill)
         {
-            var token = await _auth.GetTokenAsync();
-            using var request = new HttpRequestMessage(HttpMethod.Post, "api/skills");
-            request.Content = JsonContent.Create(newSkill);
-            if (!string.IsNullOrEmpty(token))
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = await _http.SendAsync(request);
-            return response.IsSuccessStatusCode;
+            try
+            {
+                var token = await _auth.GetTokenAsync();
+                using var request = new HttpRequestMessage(HttpMethod.Post, "api/skills");
+                request.Content = JsonContent.Create(newSkill);
+                if (!string.IsNullOrEmpty(token))
+                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                var response = await _http.SendAsync(request);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding skill: {ex.Message}");
+                return false;
+            }
         }
     }
 }

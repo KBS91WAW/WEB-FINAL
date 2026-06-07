@@ -45,7 +45,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowClient", policy =>
     {
-        policy.WithOrigins("https://localhost:7079", "http://localhost:5086", "https://localhost:5001")
+        policy.WithOrigins("http://localhost:5079", "http://localhost:5086", "http://localhost:5000")
               .AllowAnyMethod()
               .AllowAnyHeader();
     });
@@ -55,6 +55,9 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
+    var context = scope.ServiceProvider.GetRequiredService<SkillSnapContext>();
+    context.Database.Migrate();
+
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
@@ -70,7 +73,6 @@ using (var scope = app.Services.CreateScope())
 
 // Configure the HTTP request pipeline.
 
-app.UseHttpsRedirection();
 app.UseCors("AllowClient");
 app.UseAuthentication();
 app.UseAuthorization();

@@ -22,8 +22,16 @@ namespace SkillSnap.Client.Services
         /// <summary>Registers a new user with the given email and password.</summary>
         public async Task<bool> RegisterAsync(string email, string password)
         {
-            var response = await _http.PostAsJsonAsync("api/auth/register", new { email, password });
-            return response.IsSuccessStatusCode;
+            try
+            {
+                var response = await _http.PostAsJsonAsync("api/auth/register", new { email, password });
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error registering: {ex.Message}");
+                return false;
+            }
         }
 
         /// <summary>Logs in a user, stores the JWT in localStorage, and populates the session.</summary>
@@ -66,22 +74,36 @@ namespace SkillSnap.Client.Services
         /// <summary>Restores the session from localStorage on page load.</summary>
         public async Task InitializeAsync()
         {
-            var token = await GetTokenAsync();
-            if (!string.IsNullOrEmpty(token))
-                PopulateSession(token);
+            try
+            {
+                var token = await GetTokenAsync();
+                if (!string.IsNullOrEmpty(token))
+                    PopulateSession(token);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error initializing auth: {ex.Message}");
+            }
         }
 
         private void PopulateSession(string token)
         {
-            var handler = new JwtSecurityTokenHandler();
-            if (!handler.CanReadToken(token)) return;
+            try
+            {
+                var handler = new JwtSecurityTokenHandler();
+                if (!handler.CanReadToken(token)) return;
 
-            var jwt = handler.ReadJwtToken(token);
-            var userId = jwt.Subject
-                ?? jwt.Claims.FirstOrDefault(c => c.Type == "sub")?.Value
-                ?? string.Empty;
-            var role = jwt.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role || c.Type == "role")?.Value ?? string.Empty;
-            _session.SetUser(userId, role);
+                var jwt = handler.ReadJwtToken(token);
+                var userId = jwt.Subject
+                    ?? jwt.Claims.FirstOrDefault(c => c.Type == "sub")?.Value
+                    ?? string.Empty;
+                var role = jwt.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role || c.Type == "role")?.Value ?? string.Empty;
+                _session.SetUser(userId, role);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error populating session: {ex.Message}");
+            }
         }
 
         private record TokenResponse(string Token);
