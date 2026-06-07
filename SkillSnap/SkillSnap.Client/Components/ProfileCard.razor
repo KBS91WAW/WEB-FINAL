@@ -1,0 +1,12 @@
+@* ProfileCard.razor - Displays a user's name, bio, and profile picture *@
+<div class="profile-card">
+    <img src="@ProfileImageUrl" alt="Profile picture of @Name" />
+    <h2>@Name</h2>
+    <p>@Bio</p>
+</div>
+
+@code {
+    [Parameter] public string Name { get; set; } = "Jordan Developer";
+    [Parameter] public string Bio { get; set; } = "Full-stack developer passionate about learning new tech.";
+    [Parameter] public string ProfileImageUrl { get; set; } = "https://example.com/images/jordan.png";
+}

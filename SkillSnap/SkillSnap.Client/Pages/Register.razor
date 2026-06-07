@@ -1,0 +1,45 @@
+@page "/register"
+@using SkillSnap.Client.Services
+@inject AuthService AuthService
+@inject NavigationManager Navigation
+
+<h2>Register</h2>
+
+@if (!string.IsNullOrEmpty(message))
+{
+    <p style="color:@messageColor;">@message</p>
+}
+
+<div>
+    <label>Email</label>
+    <input type="email" @bind="email" />
+</div>
+<div>
+    <label>Password</label>
+    <input type="password" @bind="password" />
+</div>
+<button @onclick="HandleRegister">Register</button>
+<a href="/login">Already have an account? Login</a>
+
+@code {
+    private string email = string.Empty;
+    private string password = string.Empty;
+    private string message = string.Empty;
+    private string messageColor = "green";
+
+    private async Task HandleRegister()
+    {
+        message = string.Empty;
+        var success = await AuthService.RegisterAsync(email, password);
+        if (success)
+        {
+            message = "Registration successful! You can now log in.";
+            messageColor = "green";
+        }
+        else
+        {
+            message = "Registration failed. Check your email and password requirements.";
+            messageColor = "red";
+        }
+    }
+}

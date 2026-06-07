@@ -1,0 +1,46 @@
+@* SkillTags.razor - Displays skills loaded from the API in a tag-style list *@
+@using SkillSnap.Client.Models
+@using SkillSnap.Client.Services
+@inject SkillService SkillService
+
+<div class="skill-tags">
+    <h3>Skills</h3>
+    @if (skills is null)
+    {
+        <p>Loading...</p>
+    }
+    else
+    {
+        <ul>
+            @foreach (var skill in skills)
+            {
+                <li class="skill-tag">
+                    <span class="skill-name">@skill.Name</span>
+                    <span class="skill-level">@skill.Level</span>
+                </li>
+            }
+        </ul>
+    }
+
+    <h4>Add Skill</h4>
+    <input placeholder="Name" @bind="newSkill.Name" />
+    <input placeholder="Level" @bind="newSkill.Level" />
+    <button @onclick="HandleAdd">Add</button>
+</div>
+
+@code {
+    private List<Skill>? skills;
+    private Skill newSkill = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        skills = await SkillService.GetSkillsAsync();
+    }
+
+    private async Task HandleAdd()
+    {
+        await SkillService.AddSkillAsync(newSkill);
+        newSkill = new();
+        skills = await SkillService.GetSkillsAsync();
+    }
+}

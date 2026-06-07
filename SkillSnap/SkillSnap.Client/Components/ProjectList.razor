@@ -1,0 +1,46 @@
+@* ProjectList.razor - Displays projects loaded from the API *@
+@using SkillSnap.Client.Models
+@using SkillSnap.Client.Services
+@inject ProjectService ProjectService
+
+<div class="project-list">
+    <h3>Projects</h3>
+    @if (projects is null)
+    {
+        <p>Loading...</p>
+    }
+    else
+    {
+        @foreach (var project in projects)
+        {
+            <div class="project-card">
+                <img src="@project.ImageUrl" alt="@project.Title" />
+                <h4>@project.Title</h4>
+                <p>@project.Description</p>
+            </div>
+        }
+    }
+
+    <h4>Add Project</h4>
+    <input placeholder="Title" @bind="newProject.Title" />
+    <input placeholder="Description" @bind="newProject.Description" />
+    <input placeholder="Image URL" @bind="newProject.ImageUrl" />
+    <button @onclick="HandleAdd">Add</button>
+</div>
+
+@code {
+    private List<Project>? projects;
+    private Project newProject = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        projects = await ProjectService.GetProjectsAsync();
+    }
+
+    private async Task HandleAdd()
+    {
+        await ProjectService.AddProjectAsync(newProject);
+        newProject = new();
+        projects = await ProjectService.GetProjectsAsync();
+    }
+}

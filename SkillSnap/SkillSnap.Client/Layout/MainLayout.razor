@@ -1,0 +1,22 @@
+﻿@inherits LayoutComponentBase
+@using SkillSnap.Client.Services
+@inject UserSessionService Session
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            @if (Session.IsAuthenticated)
+            {
+                <span class="text-muted small">Logged in as @Session.UserId</span>
+            }
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>

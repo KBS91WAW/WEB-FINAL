@@ -1,0 +1,38 @@
+@page "/login"
+@using SkillSnap.Client.Services
+@inject AuthService AuthService
+@inject NavigationManager Navigation
+
+<h2>Login</h2>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <p style="color:red;">@errorMessage</p>
+}
+
+<div>
+    <label>Email</label>
+    <input type="email" @bind="email" />
+</div>
+<div>
+    <label>Password</label>
+    <input type="password" @bind="password" />
+</div>
+<button @onclick="HandleLogin">Login</button>
+<a href="/register">Don't have an account? Register</a>
+
+@code {
+    private string email = string.Empty;
+    private string password = string.Empty;
+    private string errorMessage = string.Empty;
+
+    private async Task HandleLogin()
+    {
+        errorMessage = string.Empty;
+        var token = await AuthService.LoginAsync(email, password);
+        if (token is null)
+            errorMessage = "Invalid email or password.";
+        else
+            Navigation.NavigateTo("/");
+    }
+}
