@@ -52,9 +52,18 @@ namespace SkillSnap.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Project>> AddProject(Project project)
         {
+            if (project.PortfolioUserId == 0)
+            {
+                var portfolioUser = await _context.PortfolioUsers.FirstOrDefaultAsync();
+                if (portfolioUser is null)
+                    return BadRequest("No portfolio user exists. Seed sample data first.");
+                project.PortfolioUserId = portfolioUser.Id;
+            }
+
             _context.Projects.Add(project);
             await _context.SaveChangesAsync();
             _cache.Remove("projects");
+            project.PortfolioUser = null;
             return CreatedAtAction(nameof(GetProjects), new { id = project.Id }, project);
         }
     }

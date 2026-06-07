@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Json;
+using System.Security.Claims;
 using Microsoft.JSInterop;
 
 namespace SkillSnap.Client.Services
@@ -72,7 +73,7 @@ namespace SkillSnap.Client.Services
             var userId = jwt.Subject
                 ?? jwt.Claims.FirstOrDefault(c => c.Type == "sub")?.Value
                 ?? string.Empty;
-            var role = jwt.Claims.FirstOrDefault(c => c.Type == "role")?.Value ?? string.Empty;
+            var role = jwt.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role || c.Type == "role")?.Value ?? string.Empty;
             _session.SetUser(userId, role);
         }
 

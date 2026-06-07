@@ -23,14 +23,15 @@ namespace SkillSnap.Client.Services
         }
 
         /// <summary>Adds a new project. Requires Admin role; attaches Bearer token.</summary>
-        public async Task AddProjectAsync(Project newProject)
+        public async Task<bool> AddProjectAsync(Project newProject)
         {
             var token = await _auth.GetTokenAsync();
             using var request = new HttpRequestMessage(HttpMethod.Post, "api/projects");
             request.Content = JsonContent.Create(newProject);
             if (!string.IsNullOrEmpty(token))
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            await _http.SendAsync(request);
+            var response = await _http.SendAsync(request);
+            return response.IsSuccessStatusCode;
         }
     }
 }

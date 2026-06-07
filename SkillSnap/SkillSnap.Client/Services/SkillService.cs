@@ -23,14 +23,15 @@ namespace SkillSnap.Client.Services
         }
 
         /// <summary>Adds a new skill. Requires Admin role; attaches Bearer token.</summary>
-        public async Task AddSkillAsync(Skill newSkill)
+        public async Task<bool> AddSkillAsync(Skill newSkill)
         {
             var token = await _auth.GetTokenAsync();
             using var request = new HttpRequestMessage(HttpMethod.Post, "api/skills");
             request.Content = JsonContent.Create(newSkill);
             if (!string.IsNullOrEmpty(token))
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            await _http.SendAsync(request);
+            var response = await _http.SendAsync(request);
+            return response.IsSuccessStatusCode;
         }
     }
 }

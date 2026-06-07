@@ -2,6 +2,7 @@
 @using SkillSnap.Client.Models
 @using SkillSnap.Client.Services
 @inject ProjectService ProjectService
+@inject UserSessionService Session
 
 <div class="project-list">
     <h3>Projects</h3>
@@ -21,25 +22,53 @@
         }
     }
 
-    <h4>Add Project</h4>
-    <input placeholder="Title" @bind="newProject.Title" />
-    <input placeholder="Description" @bind="newProject.Description" />
-    <input placeholder="Image URL" @bind="newProject.ImageUrl" />
-    <button @onclick="HandleAdd">Add</button>
+    @if (Session.IsAdmin)
+    {
+        <h4>Add Project</h4>
+        <input placeholder="Title" @bind="newProject.Title" />
+        <input placeholder="Description" @bind="newProject.Description" />
+        <input placeholder="Image URL" @bind="newProject.ImageUrl" />
+        <button @onclick="HandleAdd">Add</button>
+    }
+    else
+    {
+        <p class="text-muted">Log in as an admin to add projects.</p>
+    }
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <p class="text-danger">@errorMessage</p>
+    }
 </div>
 
 @code {
     private List<Project>? projects;
     private Project newProject = new();
+    private string? errorMessage;
 
     protected override async Task OnInitializedAsync()
     {
+        Session.OnChange += StateHasChanged;
         projects = await ProjectService.GetProjectsAsync();
     }
 
     private async Task HandleAdd()
     {
-        await ProjectService.AddProjectAsync(newProject);
+        errorMessage = null;
+
+        if (string.IsNullOrWhiteSpace(newProject.Title) || string.IsNullOrWhiteSpace(newProject.Description))
+        {
+            errorMessage = "Title and description are required.";
+            return;
+        }
+
+        var added = await ProjectService.AddProjectAsync(newProject);
+        if (!added)
+        {
+            errorMessage = "Could not add project. Log in again if your session is expired.";
+            return;
+        }
+
         newProject = new();
         projects = await ProjectService.GetProjectsAsync();
     }

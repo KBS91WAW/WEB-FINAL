@@ -14,15 +14,18 @@ namespace SkillSnap.Api.Controllers
     public class AuthController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _configuration;
 
         public AuthController(
             UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager,
             SignInManager<ApplicationUser> signInManager,
             IConfiguration configuration)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
             _signInManager = signInManager;
             _configuration = configuration;
         }
@@ -35,6 +38,8 @@ namespace SkillSnap.Api.Controllers
 
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
+
+            await EnsureAdminRoleAsync(user);
 
             return Ok("User registered successfully.");
         }
@@ -54,22 +59,33 @@ namespace SkillSnap.Api.Controllers
                 return Unauthorized("Invalid credentials.");
             }
 
-            var token = GenerateJwtToken(user);
+            var token = await GenerateJwtTokenAsync(user);
             return Ok(new { token });
         }
 
-        private string GenerateJwtToken(ApplicationUser user)
+        private async Task EnsureAdminRoleAsync(ApplicationUser user)
+        {
+            if (!await _roleManager.RoleExistsAsync("Admin"))
+                await _roleManager.CreateAsync(new IdentityRole("Admin"));
+
+            await _userManager.AddToRoleAsync(user, "Admin");
+        }
+
+        private async Task<string> GenerateJwtTokenAsync(ApplicationUser user)
         {
             var jwtKey = _configuration["Jwt:Key"] ?? "SkillSnapSuperSecretKey1234567890!";
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var claims = new[]
+            var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
+
+            foreach (var role in await _userManager.GetRolesAsync(user))
+                claims.Add(new Claim(ClaimTypes.Role, role));
 
             var token = new JwtSecurityToken(
                 claims: claims,

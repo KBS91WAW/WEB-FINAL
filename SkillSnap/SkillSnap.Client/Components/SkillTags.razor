@@ -2,6 +2,7 @@
 @using SkillSnap.Client.Models
 @using SkillSnap.Client.Services
 @inject SkillService SkillService
+@inject UserSessionService Session
 
 <div class="skill-tags">
     <h3>Skills</h3>
@@ -22,24 +23,52 @@
         </ul>
     }
 
-    <h4>Add Skill</h4>
-    <input placeholder="Name" @bind="newSkill.Name" />
-    <input placeholder="Level" @bind="newSkill.Level" />
-    <button @onclick="HandleAdd">Add</button>
+    @if (Session.IsAdmin)
+    {
+        <h4>Add Skill</h4>
+        <input placeholder="Name" @bind="newSkill.Name" />
+        <input placeholder="Level" @bind="newSkill.Level" />
+        <button @onclick="HandleAdd">Add</button>
+    }
+    else
+    {
+        <p class="text-muted">Log in as an admin to add skills.</p>
+    }
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <p class="text-danger">@errorMessage</p>
+    }
 </div>
 
 @code {
     private List<Skill>? skills;
     private Skill newSkill = new();
+    private string? errorMessage;
 
     protected override async Task OnInitializedAsync()
     {
+        Session.OnChange += StateHasChanged;
         skills = await SkillService.GetSkillsAsync();
     }
 
     private async Task HandleAdd()
     {
-        await SkillService.AddSkillAsync(newSkill);
+        errorMessage = null;
+
+        if (string.IsNullOrWhiteSpace(newSkill.Name) || string.IsNullOrWhiteSpace(newSkill.Level))
+        {
+            errorMessage = "Name and level are required.";
+            return;
+        }
+
+        var added = await SkillService.AddSkillAsync(newSkill);
+        if (!added)
+        {
+            errorMessage = "Could not add skill. Log in again if your session is expired.";
+            return;
+        }
+
         newSkill = new();
         skills = await SkillService.GetSkillsAsync();
     }
