@@ -1,16 +1,34 @@
-﻿@page "/"
+@page "/"
 @using SkillSnap.Client.Components
 @using SkillSnap.Client.Services
 @inject UserSessionService Session
 
-<PageTitle>SkillSnap – Portfolio</PageTitle>
+<PageTitle>SkillSnap - Portfolio</PageTitle>
 
-<ProfileCard />
+<section class="hero">
+    <div class="hero-copy">
+        <span class="eyebrow">Portfolio Hub</span>
+        <h1>Showcase your skills with a clean, modern profile.</h1>
+        <p class="hero-text">SkillSnap makes it easy to highlight your projects, maintain your skills, and keep your portfolio polished from one place. Admin users can add new portfolio items without leaving the page.</p>
+    </div>
+    <div class="hero-card">
+        <h2>Why SkillSnap?</h2>
+        <ul>
+            <li>Clear project cards for fast discovery</li>
+            <li>Skill tags that highlight your strongest areas</li>
+            <li>Responsive, approachable forms for editing</li>
+        </ul>
+    </div>
+</section>
 
-<hr />
+<section class="section-panel">
+    <ProfileCard />
+</section>
 
-<ProjectList />
+<section class="section-panel">
+    <ProjectList />
+</section>
 
-<hr />
-
-<SkillTags />
+<section class="section-panel">
+    <SkillTags />
+</section>

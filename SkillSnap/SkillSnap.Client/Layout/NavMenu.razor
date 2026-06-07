@@ -1,11 +1,14 @@
-﻿@using SkillSnap.Client.Services
+@using SkillSnap.Client.Services
 @inject UserSessionService Session
 @inject AuthService AuthService
 @inject NavigationManager Navigation
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">SkillSnap</a>
+        <div class="brand-heading">
+            <a class="navbar-brand" href="">SkillSnap</a>
+            <small class="text-muted">A clean portfolio workspace</small>
+        </div>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>

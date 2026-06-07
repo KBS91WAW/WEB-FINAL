@@ -29,18 +29,25 @@ namespace SkillSnap.Client.Services
         /// <summary>Logs in a user, stores the JWT in localStorage, and populates the session.</summary>
         public async Task<string?> LoginAsync(string email, string password)
         {
-            var response = await _http.PostAsJsonAsync("api/auth/login", new { email, password });
-            if (!response.IsSuccessStatusCode)
-                return null;
-
-            var result = await response.Content.ReadFromJsonAsync<TokenResponse>();
-            if (result?.Token is not null)
+            try
             {
-                await _js.InvokeVoidAsync("localStorage.setItem", "authToken", result.Token);
-                PopulateSession(result.Token);
-            }
+                var response = await _http.PostAsJsonAsync("api/auth/login", new { email, password });
+                if (!response.IsSuccessStatusCode)
+                    return null;
 
-            return result?.Token;
+                var result = await response.Content.ReadFromJsonAsync<TokenResponse>();
+                if (result?.Token is not null)
+                {
+                    await _js.InvokeVoidAsync("localStorage.setItem", "authToken", result.Token);
+                    PopulateSession(result.Token);
+                }
+
+                return result?.Token;
+            }
+            catch (HttpRequestException)
+            {
+                return null;
+            }
         }
 
         /// <summary>Removes the JWT from localStorage and clears the session.</summary>

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "K:\\CODE_TRAIN\\FINAL\\SkillSnap\\SkillSnap.Api\\SkillSnap.Api.csproj": {}
+    "k:\\CODE_TRAIN\\FINAL\\SkillSnap\\SkillSnap.Api\\SkillSnap.Api.csproj": {}
   },
   "projects": {
-    "K:\\CODE_TRAIN\\FINAL\\SkillSnap\\SkillSnap.Api\\SkillSnap.Api.csproj": {
+    "k:\\CODE_TRAIN\\FINAL\\SkillSnap\\SkillSnap.Api\\SkillSnap.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "K:\\CODE_TRAIN\\FINAL\\SkillSnap\\SkillSnap.Api\\SkillSnap.Api.csproj",
+        "projectUniqueName": "k:\\CODE_TRAIN\\FINAL\\SkillSnap\\SkillSnap.Api\\SkillSnap.Api.csproj",
         "projectName": "SkillSnap.Api",
-        "projectPath": "K:\\CODE_TRAIN\\FINAL\\SkillSnap\\SkillSnap.Api\\SkillSnap.Api.csproj",
+        "projectPath": "k:\\CODE_TRAIN\\FINAL\\SkillSnap\\SkillSnap.Api\\SkillSnap.Api.csproj",
         "packagesPath": "C:\\Users\\krzys\\.nuget\\packages\\",
-        "outputPath": "K:\\CODE_TRAIN\\FINAL\\SkillSnap\\SkillSnap.Api\\obj\\",
+        "outputPath": "k:\\CODE_TRAIN\\FINAL\\SkillSnap\\SkillSnap.Api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

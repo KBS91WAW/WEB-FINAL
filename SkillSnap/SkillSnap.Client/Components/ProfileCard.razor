@@ -1,8 +1,10 @@
 @* ProfileCard.razor - Displays a user's name, bio, and profile picture *@
 <div class="profile-card">
     <img src="@ProfileImageUrl" alt="Profile picture of @Name" />
-    <h2>@Name</h2>
-    <p>@Bio</p>
+    <div>
+        <h2>@Name</h2>
+        <p>@Bio</p>
+    </div>
 </div>
 
 @code {

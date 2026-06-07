@@ -5,10 +5,18 @@
 @inject UserSessionService Session
 
 <div class="project-list">
-    <h3>Projects</h3>
+    <div class="section-header">
+        <h3>Projects</h3>
+        <p>Explore recent works and share your portfolio highlights.</p>
+    </div>
+
     @if (projects is null)
     {
-        <p>Loading...</p>
+        <p>Loading project cards...</p>
+    }
+    else if (!projects.Any())
+    {
+        <p class="text-muted">No projects have been added yet.</p>
     }
     else
     {
@@ -24,11 +32,22 @@
 
     @if (Session.IsAdmin)
     {
-        <h4>Add Project</h4>
-        <input placeholder="Title" @bind="newProject.Title" />
-        <input placeholder="Description" @bind="newProject.Description" />
-        <input placeholder="Image URL" @bind="newProject.ImageUrl" />
-        <button @onclick="HandleAdd">Add</button>
+        <div class="form-card">
+            <h4>Add Project</h4>
+            <div class="form-group">
+                <label for="project-title">Title</label>
+                <input id="project-title" placeholder="Project title" @bind="newProject.Title" />
+            </div>
+            <div class="form-group">
+                <label for="project-description">Description</label>
+                <input id="project-description" placeholder="Short description" @bind="newProject.Description" />
+            </div>
+            <div class="form-group">
+                <label for="project-image">Image URL</label>
+                <input id="project-image" placeholder="https://..." @bind="newProject.ImageUrl" />
+            </div>
+            <button class="btn btn-primary" type="button" @onclick="HandleAdd">Add Project</button>
+        </div>
     }
     else
     {
@@ -37,7 +56,7 @@
 
     @if (!string.IsNullOrEmpty(errorMessage))
     {
-        <p class="text-danger">@errorMessage</p>
+        <p class="error-text">@errorMessage</p>
     }
 </div>
 

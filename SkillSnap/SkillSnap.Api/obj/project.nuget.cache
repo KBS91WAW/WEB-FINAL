@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "JoHbW/eF4BU=",
+  "dgSpecHash": "RvFAF814zCA=",
   "success": true,
-  "projectFilePath": "K:\\CODE_TRAIN\\FINAL\\SkillSnap\\SkillSnap.Api\\SkillSnap.Api.csproj",
+  "projectFilePath": "k:\\CODE_TRAIN\\FINAL\\SkillSnap\\SkillSnap.Api\\SkillSnap.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\krzys\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\krzys\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\10.0.8\\microsoft.aspnetcore.authentication.jwtbearer.10.0.8.nupkg.sha512",

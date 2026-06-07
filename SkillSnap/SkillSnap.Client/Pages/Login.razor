@@ -3,23 +3,33 @@
 @inject AuthService AuthService
 @inject NavigationManager Navigation
 
-<h2>Login</h2>
+<div class="auth-page">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h2>Welcome back</h2>
+            <p>Sign in to manage your portfolio and publish new projects.</p>
+        </div>
 
-@if (!string.IsNullOrEmpty(errorMessage))
-{
-    <p style="color:red;">@errorMessage</p>
-}
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <p class="error-text">@errorMessage</p>
+        }
 
-<div>
-    <label>Email</label>
-    <input type="email" @bind="email" />
+        <div class="form-group">
+            <label for="login-email">Email</label>
+            <input id="login-email" type="email" @bind="email" placeholder="you@example.com" />
+        </div>
+        <div class="form-group">
+            <label for="login-password">Password</label>
+            <input id="login-password" type="password" @bind="password" placeholder="Enter your password" />
+        </div>
+
+        <button class="btn btn-primary" @onclick="HandleLogin">Login</button>
+        <div style="margin-top: 1rem;">
+            <a href="/register">Don't have an account? Register</a>
+        </div>
+    </div>
 </div>
-<div>
-    <label>Password</label>
-    <input type="password" @bind="password" />
-</div>
-<button @onclick="HandleLogin">Login</button>
-<a href="/register">Don't have an account? Register</a>
 
 @code {
     private string email = string.Empty;

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "K:\\CODE_TRAIN\\FINAL\\SkillSnap\\SkillSnap.Client\\SkillSnap.Client.csproj": {}
+    "k:\\CODE_TRAIN\\FINAL\\SkillSnap\\SkillSnap.Client\\SkillSnap.Client.csproj": {}
   },
   "projects": {
-    "K:\\CODE_TRAIN\\FINAL\\SkillSnap\\SkillSnap.Client\\SkillSnap.Client.csproj": {
+    "k:\\CODE_TRAIN\\FINAL\\SkillSnap\\SkillSnap.Client\\SkillSnap.Client.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "K:\\CODE_TRAIN\\FINAL\\SkillSnap\\SkillSnap.Client\\SkillSnap.Client.csproj",
+        "projectUniqueName": "k:\\CODE_TRAIN\\FINAL\\SkillSnap\\SkillSnap.Client\\SkillSnap.Client.csproj",
         "projectName": "SkillSnap.Client",
-        "projectPath": "K:\\CODE_TRAIN\\FINAL\\SkillSnap\\SkillSnap.Client\\SkillSnap.Client.csproj",
+        "projectPath": "k:\\CODE_TRAIN\\FINAL\\SkillSnap\\SkillSnap.Client\\SkillSnap.Client.csproj",
         "packagesPath": "C:\\Users\\krzys\\.nuget\\packages\\",
-        "outputPath": "K:\\CODE_TRAIN\\FINAL\\SkillSnap\\SkillSnap.Client\\obj\\",
+        "outputPath": "k:\\CODE_TRAIN\\FINAL\\SkillSnap\\SkillSnap.Client\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
