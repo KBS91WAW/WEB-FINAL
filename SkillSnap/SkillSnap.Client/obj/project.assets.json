@@ -2297,7 +2297,7 @@
       ]
     },
     "Microsoft.NET.Sdk.WebAssembly.Pack/10.0.8": {
-      "sha512": "WUv/XB8vEno93Ucn9cOUVCOpbUOibH99GXaIWXBcIo6pEXFTObT9jEXZKZNpS0SifFEtB2l191UL887658Iu2A==",
+      "sha512": "xQ05xw4t8wjFxwD7a/Nye/IPEihIyUkZIbRzTytVFqko6Ows3UvjqHIEjk3gCOIZloNFOLykYPsTyKRCvEs6ng==",
       "type": "package",
       "path": "microsoft.net.sdk.webassembly.pack/10.0.8",
       "hasTools": true,
@@ -2375,23 +2375,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\KrzysztofBieda-Sawic\\.nuget\\packages\\": {},
+    "C:\\Users\\krzys\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "A:\\SOFT_ARCH\\FINAL\\SkillSnap\\SkillSnap.Client\\SkillSnap.Client.csproj",
+      "projectUniqueName": "K:\\CODE_TRAIN\\FINAL\\SkillSnap\\SkillSnap.Client\\SkillSnap.Client.csproj",
       "projectName": "SkillSnap.Client",
-      "projectPath": "A:\\SOFT_ARCH\\FINAL\\SkillSnap\\SkillSnap.Client\\SkillSnap.Client.csproj",
-      "packagesPath": "C:\\Users\\KrzysztofBieda-Sawic\\.nuget\\packages\\",
-      "outputPath": "A:\\SOFT_ARCH\\FINAL\\SkillSnap\\SkillSnap.Client\\obj\\",
+      "projectPath": "K:\\CODE_TRAIN\\FINAL\\SkillSnap\\SkillSnap.Client\\SkillSnap.Client.csproj",
+      "packagesPath": "C:\\Users\\krzys\\.nuget\\packages\\",
+      "outputPath": "K:\\CODE_TRAIN\\FINAL\\SkillSnap\\SkillSnap.Client\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\KrzysztofBieda-Sawic\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\krzys\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -2399,6 +2399,7 @@
         "net10.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
@@ -2469,6 +2470,12 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.NETCore.App.Runtime.Mono.browser-wasm",
+            "version": "[10.0.8, 10.0.8]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
